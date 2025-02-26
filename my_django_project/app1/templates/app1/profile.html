@@ -1,0 +1,248 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&display=swap" rel="stylesheet">
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+    <style>
+
+         /* Ensure long text wraps within the card */
+    .content__title span, .content__description p {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        white-space: pre-wrap !important;
+    }
+
+    /* Increase width of the card/div */
+    .profile-page .content {
+        max-width: 950px !important; /* Increased card width */
+        width: 100% !important;
+        padding: 2rem !important;
+    }
+
+    /* For Firefox custom scrollbar */
+    .profile-page {
+        scrollbar-width: thin !important; /* Thin scrollbar */
+        scrollbar-color: #4CAF50 #e0e0e0 !important; /* Thumb and track colors */
+    }
+
+    /* Custom scrollbar for WebKit-based browsers */
+    .profile-page::-webkit-scrollbar {
+        width: 14px !important; /* Wider scrollbar for better appearance */
+        height: 14px !important;
+    }
+
+    .profile-page::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #1d8cf8, #4CAF50) !important; /* Gradient thumb */
+        border-radius: 10px !important; /* Rounded scrollbar edges */
+        border: 3px solid #e0e0e0 !important; /* Space around thumb */
+    }
+
+    .profile-page::-webkit-scrollbar-track {
+        background: #e0e0e0 !important; /* Light gray track */
+        border-radius: 10px !important;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important; /* Slight shadow for depth */
+    }
+
+    /* Hover effect for thumb */
+    .profile-page::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #1e90ff, #45a049) !important;
+    }
+         /* Ensure long text wraps within the card */
+    .content__title span, .content__description p {
+        word-wrap: break-word !important; /* Break words if they are too long */
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        white-space: pre-wrap !important; /* Preserve line breaks but wrap content */
+    }
+
+    /* Apply custom styles to the scrollbar */
+    .profile-page {
+        scrollbar-width: thin !important; /* For Firefox */
+        scrollbar-color: #1d8cf8 #f0f0f0 !important; /* Thumb and track colors */
+    }
+
+    /* For Webkit-based browsers (Chrome, Edge, Safari) */
+    .profile-page::-webkit-scrollbar {
+        width: 10px !important;
+    }
+
+    .profile-page::-webkit-scrollbar-thumb {
+        background-color: #1d8cf8 !important; /* Thumb color */
+        border-radius: 5px !important; /* Rounded scrollbar edges */
+        border: 2px solid #f0f0f0 !important; /* Space around thumb */
+    }
+
+    .profile-page::-webkit-scrollbar-track {
+        background-color: #f0f0f0 !important; /* Track background color */
+    }
+    .content__title h1 {
+        margin-bottom: 15px !important;
+        font-size: 2.5rem !important;
+    }
+
+    .content__title span {
+        display: block !important;
+        margin-bottom: 10px !important;
+        font-size: 1.4rem !important;
+    }
+
+    .content__title span:nth-of-type(n+2) {
+        margin-top: 10px !important;
+    }
+
+    .content__description {
+        margin-bottom: 5px !important;
+    }
+
+    .content__description p {
+        margin-bottom: 5px !important;
+        font-size: 1.8rem !important;
+    }
+
+    .content__button {
+        margin-top: 5px !important;
+    }
+
+    .content__button .button__text {
+        font-size: 1.3rem !important;
+    }
+
+    .content__button a {
+        padding: 8px 15px !important;
+        font-size: 1.2rem !important;
+        border-radius: 50px !important;
+        width: auto !important;
+        height: auto !important;
+        display: inline-block !important;
+    }
+
+    .content__button .button__border {
+        width: 100% !important;
+    }
+
+    .content__button .button__bg {
+        width: 100% !important;
+    }
+    </style>
+</head>
+<body>
+    <div class="profile-page">
+        <div class="content">
+            <div class="content__cover">
+                <div class="content__avatar" style="background-image: url('{% static "images/profile2.png" %}'); background-color: white; background-size: cover; background-position: center; border-radius: 50px;"></div>
+
+                <div class="content__bull"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <!-- Updated content__actions div -->
+<div class="content__actions">
+    {% if is_ngo %}
+    <a href="{% url 'user_login' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path fill="currentColor" d="M192 256A112 112 0 1 0 80 144a111.94 111.94 0 0 0 112 112zm76.8 32h-8.3a157.53 157.53 0 0 1-68.5 16c-24.6 0-47.6-6-68.5-16h-8.3A115.23 115.23 0 0 0 0 403.2V432a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48v-28.8A115.23 115.23 0 0 0 268.8 288z"></path>
+        </svg>
+        <span>Login as User</span>
+    </a>
+    {% else %}
+    <a href="{% url 'ngo_login' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path fill="currentColor" d="M192 256A112 112 0 1 0 80 144a111.94 111.94 0 0 0 112 112zm76.8 32h-8.3a157.53 157.53 0 0 1-68.5 16c-24.6 0-47.6-6-68.5-16h-8.3A115.23 115.23 0 0 0 0 403.2V432a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48v-28.8A115.23 115.23 0 0 0 268.8 288z"></path>
+        </svg>
+        <span>Login as NGO</span>
+    </a>
+    {% endif %}
+    <a href="{% url 'logout' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!-- Logout icon: a simple door with arrow -->
+            <path fill="currentColor" d="M96 480h64c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H96C60.7 32 32 60.7 32 96v320c0 35.3 28.7 64 64 64zm368-192H256v-64h208l-72-72 48-48 160 160-160 160-48-48 72-72z"/>
+        </svg>
+        <span>Logout</span>
+    </a>
+</div>
+            <div class="content__title">
+                {% if is_ngo %}
+                    <h1>{{ organization_name }}</h1>
+                    <span>Contact Person: {{ contact_person }}</span>
+                    <span>Email: {{ contact_email }}</span>
+                    <span>Contact: {{ contact_number }}</span>
+                    <span>Address: {{ organization_address }}</span>
+                    <span>Area of Focus: {{ area_of_focus }}</span>
+                    <span>Established: {{ establishment_year }}</span>
+                {% else %}
+                    <h1>{{ first_name }} {{ last_name }}</h1>
+                    <span>Age: {{ age }}</span>
+                    <span>Contact: {{ contact_number }}</span>
+                    <span>Address: {{ address }}</span>
+                    <span>Interests: {{ interests }}</span>
+                {% endif %}
+            </div>
+            <div class="content__button">
+                <a class="button" href="{% url 'index' %}">
+                    <div class="button__border"></div>
+                    <div class="button__bg"></div>
+                    <p class="button__text">Home</p>
+                </a>
+            </div>
+        </div>
+        <div class="bg">
+            <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="theme-switcher-wrapper" id="theme-switcher-wrapper">
+            <span>Themes color</span>
+            <ul>
+                <li><em class="is-active" data-theme="orange"></em></li>
+                <li><em data-theme="green"></em></li>
+                <li><em data-theme="purple"></em></li>
+                <li><em data-theme="blue"></em></li>
+            </ul>
+        </div>
+        <div class="theme-switcher-button" id="theme-switcher-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                <path fill="currentColor" d="M352 0H32C14.33 0 0 14.33 0 32v224h384V32c0-17.67-14.33-32-32-32zM0 320c0 35.35 28.66 64 64 64h64v64c0 35.35 28.66 64 64 64s64-28.65 64-64v-64h64c35.34 0 64-28.65 64-64v-32H0v32zm192 104c13.25 0 24 10.74 24 24 0 13.25-10.75 24-24 24s-24-10.75-24-24c0-13.26 10.75-24 24-24z"></path>
+            </svg>
+        </div>
+    </div>
+    <script>
+        (() => {
+            'use-strict'
+            const themeSwiter = {
+                init: function() {
+                    this.wrapper = document.getElementById('theme-switcher-wrapper')
+                    this.button = document.getElementById('theme-switcher-button')
+                    this.theme = this.wrapper.querySelectorAll('[data-theme]')
+                    this.themes = ['theme-orange', 'theme-purple', 'theme-green', 'theme-blue']
+                    this.events()
+                    this.start()
+                },
+                events: function() {
+                    this.button.addEventListener('click', this.displayed.bind(this), false)
+                    this.theme.forEach(theme => theme.addEventListener('click', this.themed.bind(this), false))
+                },
+                start: function() {
+                    let theme = this.themes[Math.floor(Math.random() * this.themes.length)]
+                    document.body.classList.add(theme)
+                },
+                displayed: function() {
+                    (this.wrapper.classList.contains('is-open'))
+                        ? this.wrapper.classList.remove('is-open')
+                        : this.wrapper.classList.add('is-open')
+                },
+                themed: function(e) {
+                    this.themes.forEach(theme => {
+                        if(document.body.classList.contains(theme))
+                            document.body.classList.remove(theme)
+                    })
+                    return document.body.classList.add(`theme-${e.currentTarget.dataset.theme}`)
+                }
+            }
+            themeSwiter.init()
+        })()
+    </script>
+</body>
+</html>

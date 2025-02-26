@@ -1,0 +1,173 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Requests List</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+        /* Fixed header styles */
+        .fixed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .fixed-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .home-button {
+            background-color: #5bc1ac;
+            color: #ffffff;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: right;
+        }
+
+        .home-button:hover {
+            background-color: #231E1E;
+        }
+
+        /* Main container styles */
+        .help-requests-container {
+            background: #ffffff;
+            padding: 20px;
+            width: 100%;
+            max-width: 1400px;
+            border-radius: 12px;
+            box-shadow: 10px 14px 90px #F5AC6252;
+            margin: 80px auto;
+            height: auto;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Help request cards wrapper */
+        .request-card-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Help request card styles */
+        .request-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+        }
+
+        /* Urgency badge styles */
+        .urgency-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .immediate {
+            background: #ff4444;
+            color: white;
+        }
+
+        .urgent {
+            background: #ffbb33;
+            color: black;
+        }
+
+        .normal {
+            background: #00C851;
+            color: white;
+        }
+
+        /* Pagination button styles */
+        .btn-pagination {
+            background-color: #5bc1ac;
+            color: #fff;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-pagination:hover {
+            background-color: #231E1E;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .request-card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .request-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="help-requests-container">
+        <div class="fixed-header">
+            <button type="button" class="home-button" onclick="window.location.href='{% url 'index' %}';">Home</button>
+            <h2>Help Requests</h2>
+            {% if help_requests.has_previous %}
+                <a class="btn btn-pagination" href="?page={{ help_requests.previous_page_number }}">&laquo; Previous</a>
+            {% endif %}
+            {% if help_requests.has_next %}
+                <a class="btn btn-pagination" href="?page={{ help_requests.next_page_number }}">Next &raquo;</a>
+            {% endif %}
+        </div>
+
+        <div class="request-card-wrapper">
+            {% for request in help_requests %}
+                <div class="request-card">
+                    <div class="request-info">
+                        <span class="urgency-badge {{ request.urgency }}">{{ request.get_urgency_display }}</span>
+                        <h3>{{ request.full_name }}</h3>
+                        <p><strong>Age:</strong> {{ request.age }}</p>
+                        <p><strong>Contact:</strong> {{ request.contact }}</p>
+                        <p><strong>Location:</strong> {{ request.location }}</p>
+                        <p><strong>Help Type:</strong> {{ request.get_help_type_display }}</p>
+                        <p><strong>Description:</strong> {{ request.description }}</p>
+                        <p><strong>Submitted:</strong> {{ request.created_at|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="request-card">
+                    <p>No help requests available at this time.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

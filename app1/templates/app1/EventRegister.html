@@ -1,0 +1,245 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+        /* Custom styles */
+        .registration-container {
+            background: #ffffff;
+            padding: 15px 25px;
+            width: 640px;
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 10px 14px 90px #F5AC6252;
+            margin: 0 auto;
+        }
+
+        .registration-body .registration-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .registration-box .input-box {
+            width: 48%;
+            padding: 5px 0;
+        }
+
+        .registration-box .input-box label {
+            font-size: 14px;
+            color: #231E1E;
+        }
+
+        .registration-box .input-field {
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid #1B1B1B46;
+            padding-left: 8px;
+        }
+
+        .registration-box .input-field:focus {
+            outline: none;
+            border: solid #5bc1ac;
+            border-width: 1px 1px 3px 1px;
+        }
+
+        /* Styling for textarea fields */
+        .registration-box textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 4px;
+            border: 1px solid #1B1B1B46;
+            padding-left: 8px;
+        }
+
+        /* Button styling */
+        .registration-body .btn-register {
+            display: block;
+            margin: 20px auto;
+            background: #5bc1ac;
+            color: #F8F7FC;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 4px 12px #F5AC6280;
+            cursor: pointer;
+        }
+
+        .registration-body .btn-register:hover {
+            background: #231E1E;
+            box-shadow: 0px 4px 12px #231E1E90;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-home, .btn-register {
+            background-color: #5bc1ac;
+            color: #F8F7FC;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 4px 12px #F5AC6280;
+            cursor: pointer;
+            width: 200px;
+        }
+
+        .btn-home:hover, .btn-register:hover {
+            background: #231E1E;
+            box-shadow: 0px 4px 12px #231E1E90;
+        }
+
+        @media screen and (max-width: 480px) {
+            .registration-container {
+                width: 90%;
+                padding: 10px;
+            }
+
+            .registration-box .input-box {
+                width: 100%;
+            }
+
+            .registration-body .btn-register {
+                width: 100%;
+            }
+        }
+
+        /* Custom styles for error messages */
+        .error-message {
+            color: #FF0000;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-header">
+            <h2>Event Registration Form</h2>
+            <span class="divider"></span>
+        </div>
+        <div class="registration-body">
+            <form id="eventRegistrationForm" method="POST" action="{% url 'event_register' %}">
+                {% csrf_token %}
+                <div class="registration-box">
+                    <div class="input-box">
+                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                        {{ form.first_name|add_class:"input-field" }}
+                        <div class="error-message" id="error-first-name"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                        {{ form.last_name|add_class:"input-field" }}
+                        <div class="error-message" id="error-last-name"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.contact_number.id_for_label }}">Contact Number</label>
+                        {{ form.contact_number|add_class:"input-field" }}
+                        <div class="error-message" id="error-contact-number"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.address.id_for_label }}">Address</label>
+                        {{ form.address|add_class:"input-field" }}
+                        <div class="error-message" id="error-address"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.gender.id_for_label }}">Gender</label>
+                        {{ form.gender|add_class:"input-field" }}
+                        <div class="error-message" id="error-gender"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.age.id_for_label }}">Age</label>
+                        {{ form.age|add_class:"input-field" }}
+                        <div class="error-message" id="error-age"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.event.id_for_label }}">Select Event</label>
+                        {{ form.event|add_class:"input-field" }}
+                        <div class="error-message" id="error-event"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.specific_date.id_for_label }}">Specific Date</label>
+                        {{ form.specific_date|add_class:"input-field" }}
+                        <div class="error-message" id="error-specific-date"></div>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="btn-home" onclick="window.location.href='{% url 'index' %}';">Home</button>
+                    <button type="submit" class="btn-register">Register Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('eventRegistrationForm').addEventListener('submit', function (event) {
+            let isValid = true;
+
+            // Clear all previous error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.innerHTML = "");
+
+            // First Name Validation
+            const firstName = document.querySelector("input[name='first_name']");
+            const errorFirstName = document.getElementById('error-first-name');
+            if (!/^[A-Za-z]+$/.test(firstName.value)) {
+                errorFirstName.innerHTML = "First name should only contain alphabets.";
+                isValid = false;
+            }
+
+            // Last Name Validation
+            const lastName = document.querySelector("input[name='last_name']");
+            const errorLastName = document.getElementById('error-last-name');
+            if (!/^[A-Za-z]+$/.test(lastName.value)) {
+                errorLastName.innerHTML = "Last name should only contain alphabets.";
+                isValid = false;
+            }
+
+            // Contact Number Validation
+            const contactNumber = document.querySelector("input[name='contact_number']");
+            const errorContactNumber = document.getElementById('error-contact-number');
+            if (!/^\d{10}$/.test(contactNumber.value)) {
+                errorContactNumber.innerHTML = "Contact number must be 10 digits.";
+                isValid = false;
+            }
+
+            // Age Validation
+            const age = document.querySelector("input[name='age']");
+            const errorAge = document.getElementById('error-age');
+            if (age.value < 1 || age.value > 100) {
+                errorAge.innerHTML = "Age must be between 1 and 120.";
+                isValid = false;
+            }
+
+            // Specific Date Validation
+            const specificDate = document.querySelector("input[name='specific_date']");
+            const errorSpecificDate = document.getElementById('error-specific-date');
+            const currentDate = new Date().toISOString().split('T')[0];
+            if (specificDate.value < currentDate) {
+                errorSpecificDate.innerHTML = "The event date cannot be in the past.";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
+    </script>
+</body>
+</html>

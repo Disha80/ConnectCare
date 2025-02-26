@@ -1,0 +1,689 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Connect Care</title>
+
+        <!-- CSS FILES -->        
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/bootstrap-icons.css' %}" rel="stylesheet">
+        <link href="{% static 'css/templatemo-kind-heart-charity.css' %}" rel="stylesheet">
+<!--
+
+TemplateMo 581 Kind Heart Charity
+
+https://templatemo.com/tm-581-kind-heart-charity
+
+-->
+<style>
+   .volunteer-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+   
+}
+
+.custom-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Reduce overall size of the form */
+    width: 100%;
+}
+
+.volunteer-image-container {
+    text-align: center;
+    margin-left: 20px;
+    max-width: 500px;
+}
+
+.volunteer-image {
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.custom-block-body {
+    margin-top: 15px;
+}
+
+.custom-block-body h4 {
+    font-size: 22px;
+}
+
+.custom-block-body p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .volunteer-section {
+        flex-direction: column;
+    }
+
+    .volunteer-image-container {
+        margin: 20px 0 0;
+    }
+}
+.custom-text-box {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.health-main-card {
+    background-color: #5bc1ac;
+    color: white;
+    padding: 20px;
+}
+
+.custom-text-box h5 {
+    font-size: 22px;
+    color: #5bc1ac;
+}
+
+.custom-text-box p {
+    font-size: 16px;
+    color: #333333;
+}
+
+.custom-text-box .btn-primary {
+    background-color: #5bc1ac;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-text-box .btn-primary:hover {
+    background-color: #4aa293;
+}
+
+@media (max-width: 768px) {
+    .custom-text-box {
+        margin-bottom: 15px;
+    }
+
+    .health-main-card {
+        padding: 21px;
+    }
+}
+
+</style>
+
+    
+    </head>
+    
+    <body id="section_1">
+
+        <nav class="navbar navbar-expand-lg bg-light shadow-lg">
+            <div class="container">
+                <a class="navbar-brand">
+                    <img src="{% static 'images/logo.png' %}" class="logo img-fluid" alt="Kind Heart Charity">
+                    <span>
+                        ConnectCare
+                        <small>A Caring Place for Elders</small>
+                    </span>
+                </a>
+        
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#top">Home</a>
+                        </li>
+        
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="section_2">Events</a>
+                        </li>
+        
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_4">Volunteer</a>
+                        </li>
+
+                        <!-- View All Volunteers - Add 'nav-link' class here -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'volunteers_list' %}">View All Volunteers</a>
+                        </li>
+        
+                        <!--Registration-->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarRegistrationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Registration</a> 
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarRegistrationDropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'user_registration' %}">For User</a></li>
+                                <li><a class="dropdown-item" href="{% url 'ngo_registration' %}">For NGOs</a></li>
+                            </ul>
+                        </li>
+        
+                        <!-- Login -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarLoginDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLoginDropdownMenuLink">
+                                <!-- Link for User Login -->
+                                <li><a class="dropdown-item" href="{% url 'user_login' %}">For Users</a></li>
+                                <li><a class="dropdown-item" href="{% url 'ngo_login' %}">For NGO</a></li>
+                            </ul>
+                        </li>
+
+                        {% if request.session.user_id %}
+                        <!-- Show this only to normal users -->
+                        <li class="nav-item">
+                            <a href="{% url 'help_request_form' %}" class="nav-link">Request Help</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% if request.session.ngo_id %}
+                        <!-- Show this only to NGO users -->
+                        <li class="nav-item">
+                            <a href="{% url 'view_help_requests' %}" class="nav-link">View Help Requests</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+        
+
+        <main>
+
+            <section class="hero-section hero-section-full-height">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12 p-0">
+                            <div id="hero-slide" class="carousel carousel-fade slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="{% static 'images/slide/volunteer-helping-with-donation-box.jpg' %}" class="carousel-image img-fluid" alt="...">
+                                        
+                                        <div class="carousel-caption d-flex flex-column justify-content-end">
+                                            <h1>BE a Kind Heart</h1>
+                                            
+                    
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <img src="{% static 'images/slide/volunteer-selecting-organizing-clothes-donations-charity.jpg' %}" class="carousel-image img-fluid" alt="...">
+                                        
+                                        <div class="carousel-caption d-flex flex-column justify-content-end">
+                                            <h1>Help Your Elders</h1>
+                                            
+                                         
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <img src="{% static 'images/slide/medium-shot-people-collecting-donations.jpg' %}" class="carousel-image img-fluid" alt="...">
+                                        
+                                        <div class="carousel-caption d-flex flex-column justify-content-end">
+                                            <h1>Care For Elder</h1>
+                                            
+                                            <p>Please tell your friends about our website</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="carousel-control-prev" type="button" data-bs-target="#hero-slide" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+
+                                <button class="carousel-control-next" type="button" data-bs-target="#hero-slide" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!--Event Section-->
+<section id="section_2" class="section-padding">
+    <div class="container">
+        <div class="row">
+   
+           <div class="col-lg-10 col-12 text-center mx-auto">
+              <h3 class="mb-5">Upcoming Recurring Events</h3>
+           </div>
+   
+           <!-- Event 1: Weekly Yoga Session -->
+           <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
+              <div class="featured-block d-flex justify-content-center align-items-center">
+                 <a href="{% url 'event_register' %}" class="d-block">
+                    <img src="{% static 'images/icons/yoga.png' %}" class="featured-block-image img-fluid" alt="Yoga Icon">
+                    <div class="featured-block-wrap">
+                       <h5 class="mb-3">Weekly Yoga Session</h5>
+                       <p>Every Monday at 7:00 AM</p>
+                    </div>
+                 </a>
+              </div>
+           </div>
+   
+           <!-- Event 2: Tech for Seniors -->
+           <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-4">
+              <div class="featured-block d-flex justify-content-center align-items-center">
+                 <a href="{% url 'event_register' %}" class="d-block">
+                    <img src="{% static 'images/icons/tech.png' %}" class="featured-block-image img-fluid" alt="Tech Icon">
+                    <div class="featured-block-wrap">
+                       <h5 class="mb-3">Tech for Seniors</h5>
+                       <p>Every Wednesday at 3:00 PM</p>
+                    </div>
+                 </a>
+              </div>
+           </div>
+   
+           <!-- Event 3: Music Therapy -->
+           <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-4">
+              <div class="featured-block d-flex justify-content-center align-items-center">
+                 <a href="{% url 'event_register' %}" class="d-block">
+                    <img src="{% static 'images/icons/music.png' %}" class="featured-block-image img-fluid" alt="Music Icon">
+                    <div class="featured-block-wrap">
+                       <h5 class="mb-3">Music Therapy</h5>
+                       <p>Every Friday at 5:00 PM</p>
+                    </div>
+                 </a>
+              </div>
+           </div>
+   
+           <!-- Event 4: Gardening Club -->
+           <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
+              <div class="featured-block d-flex justify-content-center align-items-center">
+                 <a href="{% url 'event_register' %}" class="d-block">
+                    <img src="{% static 'images/icons/graden.png' %}" class="featured-block-image img-fluid" alt="Gardening Icon">
+                    <div class="featured-block-wrap">
+                       <h5 class="mb-3">Gardening Club</h5>
+                       <p>Every Sunday at 10:00 AM</p>
+                    </div>
+                 </a>
+              </div>
+           </div>
+   
+           <!-- Section Footer with Instruction -->
+           <div class="col-12 text-center mt-5">
+              <h3>Click on the event title above to register and join the activity.</h3>
+           </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding section-bg" id="health-wellness">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Health and Wellness Banner -->
+            <div class="col-12 text-center mb-5">
+                <div class="custom-text-box py-4">
+                    <h2 class="mb-0">Health and Wellness</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-between align-items-stretch">
+            <!-- Nutrition Tips Card -->
+            <div class="col-lg-3 col-md-6 col-12 mb-4">
+                <div class="custom-text-box py-3 px-4 d-flex flex-column justify-content-between" style="height: 100%;">
+                    <h5 class="mb-3">Nutrition Tips</h5>
+                    <p style="font-size: 1.2rem;">
+                        Include fruits, vegetables, lean proteins, and whole grains in your diet.Limit processed foods and focus on hydration to avoid unhealthy additives and keep your body well-nourished.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mental Health Card -->
+            <div class="col-lg-3 col-md-6 col-12 mb-4">
+                <div class="custom-text-box py-3 px-4 d-flex flex-column justify-content-between" style="height: 100%;">
+                    <h5 class="mb-3">Mental Health</h5>
+                    <p style="font-size: 1.2rem;">
+                        Stay socially active, meditate regularly, and engage in hobbies to maintain mental clarity and reduce stress. Connecting with others and taking time for activities you enjoy helps clear the mind and boost well-being.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Fitness Tips Card -->
+            <div class="col-lg-3 col-md-6 col-12 mb-4">
+                <div class="custom-text-box py-3 px-4 d-flex flex-column justify-content-between" style="height: 100%;">
+                    <h5 class="mb-3">Fitness Tips</h5>
+                    <p style="font-size: 1.2rem;">
+                        Exercise daily with low-impact activities like walking or yoga to improve mobility, strength, and balance. These exercises are gentle on the joints and improve physical health, flexibility, and mood.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sleep Tips Card -->
+            <div class="col-lg-3 col-md-6 col-12 mb-4">
+                <div class="custom-text-box py-3 px-4 d-flex flex-column justify-content-between" style="height: 100%;">
+                    <h5 class="mb-3">Sleep Tips</h5>
+                    <p style="font-size: 1.2rem;">
+                        Create a consistent sleep routine, avoid caffeine late in the day, and ensure a calm, dark environment for better rest. A regular sleep schedule and a relaxing environment help improve sleep quality and energy levels.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centered Button for More Tools -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-6 col-md-8 col-12 text-center">
+                <div class="custom-text-box py-3">
+                    <h5 class="mb-3">Discover More Health Tools</h5>
+                    <a href="{% url 'health_tracker' %}" class="btn btn-primary">Explore Now</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<!--Volunteer Registration form-->
+<section class="volunteer-section section-padding" id="section_4"> 
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Form Section -->
+            <div class="col-lg-6 col-12">
+                <h2 class="text-white mb-4">Volunteer</h2>
+                <form method="POST" action="{% url 'volunteer_form' %}" class="custom-form volunteer-form mb-5 mb-lg-0">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- Full Name and Email in one row -->
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Phone Number and Age in one row -->
+                        <div class="col-md-6">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="age" name="age" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Gender and Availability in one row -->
+                        <div class="col-md-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="availability" class="form-label">Availability of Vehicle</label>
+                            <input type="text" class="form-control" id="availability" name="availability" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="skills" class="form-label">Skills</label>
+                            <textarea class="form-control" id="skills" name="skills" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="work" class="form-label">Work You Can Do</label>
+                            <textarea class="form-control" id="work" name="work" required></textarea>
+                        </div>
+                        <!-- Address and Message in one row -->
+                        <div class="col-md-6">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Image and Text Section -->
+            <div class="col-lg-6 col-12">
+                <div class="volunteer-image-container">
+                    <img src="{% static 'images/smiling-casual-woman-dressed-volunteer-t-shirt-with-badge.jpg' %}" 
+                         class="volunteer-image img-fluid" 
+                         alt="Volunteer Image">
+                    <div class="custom-block-body text-center">
+                        <h4 class="text-white mt-lg-3 mb-lg-3">About Volunteering</h4>
+                        <p class="text-white">Volunteering is a meaningful way to give back, offering support and care where it's needed most. Your time can make a real difference in someone's life.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+           
+
+
+            <section class="testimonial-section section-padding section-bg">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-8 col-12 mx-auto">
+                            <h2 class="mb-lg-3">People We Served</h2>
+                            
+                                <div id="testimonial-carousel" class="carousel carousel-fade slide" data-bs-ride="carousel">
+
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                           <div class="carousel-caption">
+                                                <h4 class="carousel-title">
+                                                    This website is so simple! I signed up for yoga, and it’s been great for my health. Highly recommend!</h4>
+
+                                                <small class="carousel-name"><span class="carousel-name-title">Maria</span>, Boss</small>
+                                           </div>
+                                        </div>
+
+                                        <div class="carousel-item">
+                                            <div class="carousel-caption">
+                                                <h4 class="carousel-title">I was hesitant at first, but this site is amazing. I’ve attended events and met new people. It’s been great!</h4>
+
+                                                <small class="carousel-name"><span class="carousel-name-title">Thomas</span>, Partner</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="carousel-item">
+                                            <div class="carousel-caption">
+                                                <h4 class="carousel-title">I used the health calculator here, and it’s easy to follow. It gave me valuable insights into my health.</h4>
+
+                                                <small class="carousel-name"><span class="carousel-name-title">Jane</span>, Advisor</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="carousel-item">
+                                            <div class="carousel-caption">
+                                                <h4 class="carousel-title">I found local events through the website and it’s been a wonderful experience. It’s brought a lot of joy to my life!</h4>
+
+                                                <small class="carousel-name"><span class="carousel-name-title">Bob</span>, Entreprenuer</small>
+                                           </div>
+                                        </div>
+
+                                          <ol class="carousel-indicators">
+                                               <li data-bs-target="#testimonial-carousel" data-bs-slide-to="0" class="active">
+                                                <img src="{% static 'images/avatar/portrait-beautiful-young-woman-standing-grey-wall.jpg' %}" class="img-fluid rounded-circle avatar-image" alt="avatar">
+                                               </li>
+
+                                               <li data-bs-target="#testimonial-carousel" data-bs-slide-to="1" class="">
+                                                <img src="{% static 'images/avatar/portrait-young-redhead-bearded-male.jpg' %}" class="img-fluid rounded-circle avatar-image" alt="avatar">
+                                               </li>
+
+                                               <li data-bs-target="#testimonial-carousel" data-bs-slide-to="2" class="">
+                                                <img src="{% static 'images/avatar/pretty-blonde-woman-wearing-white-t-shirt.jpg' %}" class="img-fluid rounded-circle avatar-image" alt="avatar">
+                                               </li>
+
+                                               <li data-bs-target="#testimonial-carousel" data-bs-slide-to="3" class="">
+                                                <img src="{% static 'images/avatar/studio-portrait-emotional-happy-funny.jpg' %}" class="img-fluid rounded-circle avatar-image" alt="avatar">
+                                               </li>
+                                          </ol>
+
+                                 </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact-section section-padding" id="Contact">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 col-12 ms-auto mb-5 mb-lg-0">
+                            <div class="contact-info-wrap">
+                                <h2>Get in touch</h2>
+
+                                <div class="contact-image-wrap d-flex flex-wrap">
+                                    <img src="{% static 'images/avatar/pretty-blonde-woman-wearing-white-t-shirt.jpg' %}" class="img-fluid avatar-image" alt="">
+
+
+                                    <div class="d-flex flex-column justify-content-center ms-3">
+                                        <p class="mb-0">Clara Barton</p>
+                                        <p class="mb-0"><strong>HR & Office Manager</strong></p>
+                                    </div>
+                                </div>
+
+                                <div class="contact-info">
+                                    <h5 class="mb-3">Contact Infomation</h5>
+
+                                    <p class="d-flex mb-2">
+                                        <i class="bi-geo-alt me-2"></i>
+                                        Pune, Pimpri Chinchwad
+                                    </p>
+
+                                    <p class="d-flex mb-2">
+                                        <i class="bi-telephone me-2"></i>
+
+                                        <a href="tel: 120-240-9600">
+                                            120-240-9600
+                                        </a>
+                                    </p>
+
+                                    <p class="d-flex">
+                                        <i class="bi-envelope me-2"></i>
+
+                                        <a href="mailto:info@yourgmail.com">
+                                            donate@connectcare.org
+                                        </a>
+                                    </p>
+
+                                    <a href="#" class="custom-btn btn mt-3">Get Direction</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 col-12 mx-auto">
+                            <form class="custom-form contact-form" action="{% url 'contact_form' %}" method="post" role="form">
+                                {% csrf_token %}
+                                <h2>Contact form</h2>
+                            
+                                <p class="mb-4">Or, you can just send an email:
+                                    <a href="#">info@connectcare.org</a>
+                                </p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="first_name" id="first-name" class="form-control" placeholder="Jack" required>
+                                    </div>
+                            
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="last_name" id="last-name" class="form-control" placeholder="Doe" required>
+                                    </div>
+                                </div>
+                            
+                                <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Jackdoe@gmail.com" required>
+                            
+                                <textarea name="message" rows="5" class="form-control" id="message" placeholder="What can we help you?"></textarea>
+                            
+                                <button type="submit" class="form-control">Send Message</button>
+                            </form>
+                            
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+      
+            <div class="site-footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-5 col-12 d-flex justify-content-center align-items-center mx-auto">
+                            <ul class="social-icon">
+                                <li class="social-icon-item">
+                                    <a href="#" class="social-icon-link bi-twitter"></a>
+                                </li>
+
+                                <li class="social-icon-item">
+                                    <a href="#" class="social-icon-link bi-facebook"></a>
+                                </li>
+
+                                <li class="social-icon-item">
+                                    <a href="#" class="social-icon-link bi-instagram"></a>
+                                </li>
+
+                                <li class="social-icon-item">
+                                    <a href="#" class="social-icon-link bi-linkedin"></a>
+                                </li>
+
+                                <li class="social-icon-item">
+                                    <a href="#" class="social-icon-link bi-youtube"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- JAVASCRIPT FILES -->
+        <script src="{% static 'js/pagination.js' %}"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/jquery.sticky.js' %}"></script>
+        <script src="{% static 'js/click-scroll.js' %}"></script>
+        <script src="{% static 'js/counter.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+
+    </body>
+</html>

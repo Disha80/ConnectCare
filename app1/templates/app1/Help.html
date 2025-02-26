@@ -1,0 +1,364 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidential Help Request</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+.help-form-container {
+    background: #ffffff;
+    padding: 20px 30px;
+    width: 700px; /* Fixed width */
+    max-width: 90%;
+    min-height: 600px; /* Minimum height */
+    border-radius: 12px;
+    box-shadow: 10px 14px 90px #F5AC6252;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    transition: height 0.3s ease-in-out; /* Smooth height transition */
+}
+
+/* Form body should expand */
+.help-form-body {
+    flex-grow: 1;
+    overflow-y: visible; /* Allow form to grow */
+    padding-right: 10px;
+}
+
+/* Form structure */
+.help-form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between rows */
+}
+
+/* Input row - two fields per row */
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Each input box */
+.input-box {
+    width: 50%;
+    padding: 5px 0;
+}
+
+/* Labels */
+.input-box label {
+    font-size: 16px;
+    color: #231E1E;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input fields */
+.input-field {
+    width: 100%;
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid #1B1B1B46;
+    padding-left: 8px;
+}
+
+/* Textarea */
+textarea.input-field {
+    height: 100px;
+    padding-top: 8px;
+    resize: vertical;
+}
+
+/* Input focus effect */
+.input-field:focus {
+    outline: none;
+    border: solid #5bc1ac;
+    border-width: 1px 1px 3px 1px;
+}
+
+/* Buttons container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+/* Submit and Home buttons */
+.btn-submit {
+    background: #5bc1ac;
+    color: #F8F7FC;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 4px 12px #F5AC6280;
+    cursor: pointer;
+    width: 200px;
+    text-align: center;
+}
+
+.btn-submit:hover {
+    background: #231E1E;
+    box-shadow: 0px 4px 12px #231E1E90;
+}
+
+/* Validation message */
+.validation-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+/* Responsive design */
+@media screen and (max-width: 600px) {
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-box {
+        width: 100%;
+    }
+}
+.input-box {
+    width: 50%; /* Ensures both fields take equal width */
+}
+
+/* Responsive design */
+@media screen and (max-width: 600px) {
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-box {
+        width: 100%; /* Stack inputs vertically on smaller screens */
+    }
+}
+/* Make text area full width */
+.input-box.full-width textarea.input-field {
+    width: 100%;  /* Expand to full width */
+    height: 120px; /* Slightly larger height */
+}
+
+/* Add space below the description field */
+.input-box.full-width {
+    margin-bottom: 20px; /* Creates space between textarea and buttons */
+}
+/* Ensure button container stays separate */
+.button-container {
+    margin-top: 20px; /* Extra space above buttons */
+}
+
+    </style>
+</head>
+<body>
+    <div class="help-form-container">
+        <div class="help-form-header">
+            <h2>Confidential Help Request</h2>
+            <p>Your information will only be shared with verified NGOs who can help you.</p>
+            <span class="divider"></span>
+        </div>
+        
+        <div class="help-form-body">
+            <form id="helpRequestForm" method="POST" action="{% url 'submit_help_request' %}" novalidate>
+                {% csrf_token %}
+                
+                <!-- First row: Full Name & Age -->
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="full_name">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" class="input-field" required>
+                        <div class="validation-message" id="full-name-error"></div>
+
+                    </div>
+                    <div class="input-box">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" class="input-field" required min="60">
+                        <div class="validation-message" id="age-error"></div>
+                    </div>
+                </div>
+        
+                <!-- Second row: Contact Number & Location -->
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="contact">Contact Number</label>
+                        <input type="tel" id="contact" name="contact" class="input-field" required>
+                        <div class="validation-message" id="contact-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="location">Current Location</label>
+                        <input type="text" id="location" name="location" class="input-field" required>
+                        <div class="validation-message" id="location-error"></div>
+                    </div>
+                </div>
+        <!-- Fourth row: Type of Help Needed & Urgency Level -->
+<div class="input-group">
+    <div class="input-box">
+        <label for="help_type">Type of Help Needed</label>
+        <select id="help_type" name="help_type" class="input-field" required>
+            <option value="">Select type of help</option>
+            <option value="financial">Financial Assistance</option>
+            <option value="medical">Medical Care</option>
+            <option value="housing">Housing Support</option>
+            <option value="daily">Daily Care Support</option>
+            <option value="emotional">Emotional Support</option>
+            <option value="other">Other</option>
+        </select>
+        <div class="validation-message" id="help-type-error"></div>
+    </div>
+
+    <div class="input-box">
+        <label for="urgency">Urgency Level</label>
+        <select id="urgency" name="urgency" class="input-field" required>
+            <option value="">Select urgency level</option>
+            <option value="immediate">Immediate (Within 24 hours)</option>
+            <option value="urgent">Urgent (Within a week)</option>
+            <option value="normal">Normal (Within a month)</option>
+        </select>
+        <div class="validation-message" id="urgency-error"></div>
+    </div>
+</div>
+
+        
+                <div class="input-box full-width">
+                    <label for="description">Detailed Description of Help Needed</label>
+                    <textarea id="description" name="description" class="input-field" required></textarea>
+                    <div class="validation-message" id="description-error"></div>
+                </div>
+        
+                <!-- Buttons -->
+                <div class="button-container">
+                    <button type="submit" class="btn-submit">Submit Request</button>
+                    <button type="button" class="btn-submit" onclick="window.location.href='{% url 'index' %}'">Home</button>
+
+                </div>
+            </form>
+        </div>
+        
+    
+
+    <script>
+       const form = document.getElementById('helpRequestForm');
+
+       const validators = {
+    full_name: (value) => {
+        if (!value) return "Name is required";
+        if (value.length < 2) return "Name must be at least 2 characters long";
+        if (!/^[A-Za-z ]+$/.test(value)) return "Name should only contain letters";
+        return "";
+    },
+    age: (value) => {
+        if (!value) return "Age is required";
+        if (value < 60) return "Age must be 60 or above";
+        if (value > 120) return "Please enter a valid age";
+        return "";
+    },
+    contact: (value) => {
+        if (!value) return "Contact number is required";
+        if (!/^\d{10}$/.test(value)) return "Please enter a valid 10-digit phone number";
+        return "";
+    },
+    location: (value) => {
+        if (!value) return "Location is required";
+        if (value.length < 5) return "Please enter a complete address";
+        return "";
+    },
+    help_type: (value) => {
+        if (!value) return "Please select the type of help needed";
+        return "";
+    },
+    description: (value) => {
+        if (!value) return "Description is required";
+        if (value.length < 20) return "Please provide more details (at least 20 characters)";
+        return "";
+    },
+    urgency: (value) => {
+        if (!value) return "Please select urgency level";
+        return "";
+    }
+};
+
+// Attach input listeners to trigger validation
+Object.keys(validators).forEach(fieldName => {
+    const input = document.getElementById(fieldName);
+    const errorDiv = document.getElementById(`${fieldName.replace('_', '-')}-error`);
+    
+    if (input && errorDiv) {
+        input.addEventListener('input', function() {
+            const error = validators[fieldName](this.value);
+            errorDiv.textContent = error;
+            if (error) {
+                this.classList.add('error');
+            } else {
+                this.classList.remove('error');
+            }
+            errorDiv.textContent = error;
+        });
+    }
+});
+
+// Form submission handler
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    let hasErrors = false;
+    Object.keys(validators).forEach(fieldName => {
+        const input = document.getElementById(fieldName);
+        const errorDiv = document.getElementById(`${fieldName.replace('_', '-')}-error`);
+        
+        if (input && errorDiv) {
+            const error = validators[fieldName](input.value);
+            errorDiv.textContent = error;
+            if (error) {
+                hasErrors = true;
+                input.setCustomValidity(error);
+            }
+        }
+    });
+
+    if (!hasErrors) {
+        this.submit();
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const formContainer = document.querySelector(".help-form-container");
+
+    Object.keys(validators).forEach(fieldName => {
+        const input = document.getElementById(fieldName);
+        const errorDiv = document.getElementById(`${fieldName.replace('_', '-')}-error`);
+
+        if (input && errorDiv) {
+            input.addEventListener("input", function () {
+                const error = validators[fieldName](this.value.trim());
+                errorDiv.textContent = error;
+                input.setCustomValidity(error ? "Invalid" : "");
+
+                adjustFormHeight();
+            });
+        }
+    });
+
+    function adjustFormHeight() {
+        const errorMessages = document.querySelectorAll(".validation-message");
+        let hasErrors = Array.from(errorMessages).some(msg => msg.textContent.trim() !== "");
+
+        if (hasErrors) {
+            formContainer.style.height = "auto"; // Allow height to expand
+        } else {
+            formContainer.style.height = "600px"; // Reset to normal height
+        }
+    }
+});
+
+    </script>
+</body>
+</html>

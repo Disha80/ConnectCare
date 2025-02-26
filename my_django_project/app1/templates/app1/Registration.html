@@ -1,0 +1,320 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+        /* Ensuring proper width and centering */
+        .registration-container {
+            background: #ffffff;
+            padding: 15px 25px;
+            width: 640px;
+            max-width: 100%;  /* Prevents stretching beyond container size */
+            border-radius: 12px;
+            box-shadow: 10px 14px 90px #F5AC6252;
+            margin: 0 auto;  /* Centers the form */
+        }
+
+        .registration-body .registration-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .registration-box .input-box {
+            width: 48%;
+            padding: 5px 0;
+        }
+
+        .registration-box .input-box label {
+            font-size: 14px;
+            color: #231E1E;
+        }
+
+        .registration-box .input-field {
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid #1B1B1B46;
+            padding-left: 8px;
+        }
+
+        .registration-box .input-field:focus {
+            outline: none;
+            border: solid #5bc1ac;
+            border-width: 1px 1px 3px 1px;
+        }
+
+        /* Styling for select fields (gender) */
+        .registration-box select {
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid #1B1B1B46;
+            padding-left: 8px;
+            font-size: 14px;
+        }
+
+        .registration-box select:focus {
+            outline: none;
+            border: solid #5bc1ac;
+            border-width: 1px 1px 3px 1px;
+        }
+
+        /* Button styling */
+        .registration-body .btn-register {
+            display: block;
+            margin: 20px auto;
+            background: #5bc1ac;
+            color: #F8F7FC;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 4px 12px #F5AC6280;
+            cursor: pointer;
+        }
+
+        .registration-body .btn-register:hover {
+            background: #231E1E;
+            box-shadow: 0px 4px 12px #231E1E90;
+        }
+
+        /* Media queries for responsiveness */
+        @media screen and (max-width: 480px) {
+            .registration-container {
+                width: 90%;
+                padding: 10px;
+            }
+
+            .registration-box .input-box {
+                width: 100%;
+            }
+
+            .registration-body .btn-register {
+                width: 100%;
+            }
+        }
+       
+    .btn-container {
+        display: flex;
+        gap: 10px;  /* Adds space between buttons */
+        justify-content: center; /* Centers the buttons */
+        margin-top: 20px; /* Keeps the margin */
+    }
+
+    .btn-home, .btn-register, .btn-NGOregister {
+        background-color: #5bc1ac;
+        color: #F8F7FC;
+        font-weight: 700;
+        font-size: 16px;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 4px;
+        box-shadow: 0px 4px 12px #F5AC6280;
+        cursor: pointer;
+        width: 200px; /* Ensures all buttons are the same size */
+    }
+
+    .btn-home:hover, .btn-register:hover, .btn-NGOregister:hover {
+        background: #231E1E;
+        box-shadow: 0px 4px 12px #231E1E90;
+    }
+
+   
+        .validation-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+</style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-header">
+            <h2>Registration Form</h2>
+            <span class="divider"></span>
+        </div>
+        <div class="registration-body">
+            <form id="registrationForm" method="POST" action="{% url 'user_registration' %}" novalidate>
+                {% csrf_token %}
+                <div class="registration-box">
+                    <div class="input-box">
+                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                        {{ form.first_name|add_class:"input-field"|attr:"required"|attr:"pattern:^[A-Za-z ]{2,50}$"|attr:"title:First name should only contain letters and be 2-50 characters long" }}
+                        <div class="validation-message" id="first-name-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                        {{ form.last_name|add_class:"input-field"|attr:"required"|attr:"pattern:^[A-Za-z ]{2,50}$"|attr:"title:Last name should only contain letters and be 2-50 characters long" }}
+                        <div class="validation-message" id="last-name-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.contact_number.id_for_label }}">Contact Number</label>
+                        {{ form.contact_number|add_class:"input-field"|attr:"required"|attr:"pattern:^[0-9]{10}$"|attr:"title:Please enter a valid 10-digit phone number" }}
+                        <div class="validation-message" id="contact-number-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.address.id_for_label }}">Address</label>
+                        {{ form.address|add_class:"input-field"|attr:"required"|attr:"minlength:5"|attr:"maxlength:200"|attr:"title:Address must be between 5 and 200 characters" }}
+                        <div class="validation-message" id="address-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.gender.id_for_label }}">Gender</label>
+                        {{ form.gender|add_class:"input-field"|attr:"required" }}
+                        <div class="validation-message" id="gender-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.age.id_for_label }}">Age</label>
+                        {{ form.age|add_class:"input-field"|attr:"required"|attr:"type:number"|attr:"min:18"|attr:"max:120"|attr:"title:Age must be between 18 and 120" }}
+                        <div class="validation-message" id="age-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        {{ form.username|add_class:"input-field"|attr:"required"|attr:"pattern:^[a-zA-Z0-9_]{3,30}$"|attr:"title:Username must be 3-30 characters and can only contain letters, numbers, and underscores" }}
+                        <div class="validation-message" id="username-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        {{ form.password|add_class:"input-field"|attr:"required"|attr:"type:password"|attr:"minlength:8"|attr:"title:Password must be at least 8 characters long" }}
+                        <div class="validation-message" id="password-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.interests.id_for_label }}">Interests</label>
+                        {{ form.interests|add_class:"input-field"|attr:"required"|attr:"minlength:2"|attr:"maxlength:200" }}
+                        <div class="validation-message" id="interests-error"></div>
+                    </div>
+                    <div class="input-box">
+                        <label for="{{ form.medical_details.id_for_label }}">Medical Details (if any)</label>
+                        {{ form.medical_details|add_class:"input-field"|attr:"maxlength:500" }}
+                        <div class="validation-message" id="medical-details-error"></div>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="btn-home" onclick="window.location.href='{% url 'index' %}';">Home</button>
+                    <button type="submit" class="btn-register">Register Now</button>
+                    <button type="button" class="btn-NGOregister" onclick="window.location.href='{% url 'ngo_registration' %}';">Register as NGO/Organization</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Validation functions for each field
+        const validators = {
+            first_name: (value) => {
+                if (!value) return "First name is required";
+                if (!/^[A-Za-z ]{2,50}$/.test(value)) return "First name should only contain letters and be 2-50 characters long";
+                return "";
+            },
+            
+            last_name: (value) => {
+                if (!value) return "Last name is required";
+                if (!/^[A-Za-z ]{2,50}$/.test(value)) return "Last name should only contain letters and be 2-50 characters long";
+                return "";
+            },
+            
+            contact_number: (value) => {
+                if (!value) return "Contact number is required";
+                if (!/^[0-9]{10}$/.test(value)) return "Please enter a valid 10-digit phone number";
+                return "";
+            },
+            
+            address: (value) => {
+                if (!value) return "Address is required";
+                if (value.length < 5) return "Address must be at least 5 characters long";
+                if (value.length > 200) return "Address cannot exceed 200 characters";
+                return "";
+            },
+            
+            gender: (value) => {
+                if (!value) return "Please select a gender";
+                return "";
+            },
+            
+            age: (value) => {
+                if (!value) return "Age is required";
+                const age = parseInt(value);
+                if (isNaN(age) || age < 18 || age > 120) return "Age must be between 18 and 120";
+                return "";
+            },
+            
+            username: (value) => {
+                if (!value) return "Username is required";
+                if (!/^[a-zA-Z0-9_]{3,30}$/.test(value)) return "Username must be 3-30 characters and can only contain letters, numbers, and underscores";
+                return "";
+            },
+            
+            password: (value) => {
+                if (!value) return "Password is required";
+                if (value.length < 8) return "Password must be at least 8 characters long";
+                if (!/[A-Z]/.test(value)) return "Password must contain at least one uppercase letter";
+                if (!/[a-z]/.test(value)) return "Password must contain at least one lowercase letter";
+                if (!/[0-9]/.test(value)) return "Password must contain at least one number";
+                return "";
+            },
+            
+            interests: (value) => {
+                if (!value) return "Interests are required";
+                if (value.length < 2) return "Interests must be at least 2 characters long";
+                if (value.length > 200) return "Interests cannot exceed 200 characters";
+                return "";
+            },
+            
+            medical_details: (value) => {
+                if (value.length > 500) return "Medical details cannot exceed 500 characters";
+                return "";
+            }
+        };
+
+        // Add real-time validation to all fields
+        Object.keys(validators).forEach(fieldName => {
+            const input = document.querySelector(`[name="${fieldName}"]`);
+            const errorDiv = document.getElementById(`${fieldName.replace('_', '-')}-error`);
+            
+            if (input && errorDiv) {
+                input.addEventListener('input', function() {
+                    const error = validators[fieldName](this.value);
+                    errorDiv.textContent = error;
+                    this.setCustomValidity(error);
+                });
+            }
+        });
+
+        // Form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate all fields
+            let hasErrors = false;
+            Object.keys(validators).forEach(fieldName => {
+                const input = document.querySelector(`[name="${fieldName}"]`);
+                const errorDiv = document.getElementById(`${fieldName.replace('_', '-')}-error`);
+                
+                if (input && errorDiv) {
+                    const error = validators[fieldName](input.value);
+                    errorDiv.textContent = error;
+                    if (error) {
+                        hasErrors = true;
+                        input.setCustomValidity(error);
+                    }
+                }
+            });
+            
+            if (hasErrors) {
+                return;
+            }
+            
+            // If validation passes, submit the form
+            this.submit();
+        });
+    </script>
+</body>
+</html>

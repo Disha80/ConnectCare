@@ -1,0 +1,276 @@
+{% load static %}
+{% load widget_tweaks %} <!-- Load widget_tweaks for adding custom classes -->
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Registration</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+        /* Additional custom styles */
+        .registration-container {
+            background: #ffffff;
+            padding: 15px 25px;
+            width: 640px;
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 10px 14px 90px #F5AC6252;
+            margin: 0 auto;
+        }
+
+        .registration-body .registration-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .registration-box .input-box {
+            width: 48%;
+            padding: 5px 0;
+        }
+
+        .registration-box .input-box label {
+            font-size: 14px;
+            color: #231E1E;
+        }
+
+        .registration-box .input-field {
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid #1B1B1B46;
+            padding-left: 8px;
+        }
+
+        .registration-box .input-field:focus {
+            outline: none;
+            border: solid #5bc1ac;
+            border-width: 1px 1px 3px 1px;
+        }
+
+        /* Styling for textarea fields */
+        .registration-box textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 4px;
+            border: 1px solid #1B1B1B46;
+            padding-left: 8px;
+        }
+
+        /* Button styling */
+        .registration-body .btn-register {
+            display: block;
+            margin: 20px auto;
+            background: #5bc1ac;
+            color: #F8F7FC;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 4px 12px #F5AC6280;
+            cursor: pointer;
+        }
+
+        .registration-body .btn-register:hover {
+            background: #231E1E;
+            box-shadow: 0px 4px 12px #231E1E90;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-home, .btn-register, .btn-USERregister {
+            background-color: #5bc1ac;
+            color: #F8F7FC;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 4px 12px #F5AC6280;
+            cursor: pointer;
+            width: 200px;
+        }
+
+        .btn-home:hover, .btn-register:hover, .btn-USERregister:hover {
+            background: #231E1E;
+            box-shadow: 0px 4px 12px #231E1E90;
+        }
+
+        @media screen and (max-width: 480px) {
+            .registration-container {
+                width: 90%;
+                padding: 10px;
+            }
+
+            .registration-box .input-box {
+                width: 100%;
+            }
+
+            .registration-body .btn-register {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-header">
+            <h2>Organization Registration Form</h2>
+            <span class="divider"></span>
+        </div>
+        <div class="registration-body">
+            <form id="organizationRegistrationForm" method="POST" action="{% url 'ngo_registration' %}" onsubmit="return validateOrganizationForm()">
+                {% csrf_token %}
+                <div class="registration-box">
+                    <!-- Organization Name -->
+                    <div class="input-box">
+                        <label for="organization_name">Organization Name</label>
+                        {{ form.organization_name|add_class:"input-field" }}
+                        <small id="organizationNameError" style="color:red;"></small>
+                    </div>
+                    <!-- Contact Person -->
+                    <div class="input-box">
+                        <label for="contact_person">Contact Person</label>
+                        {{ form.contact_person|add_class:"input-field" }}
+                        <small id="contactPersonError" style="color:red;"></small>
+                    </div>
+                    <!-- Contact Email -->
+                    <div class="input-box">
+                        <label for="contact_email">Contact Email</label>
+                        {{ form.contact_email|add_class:"input-field" }}
+                        <small id="contactEmailError" style="color:red;"></small>
+                    </div>
+                    <!-- Contact Number -->
+                    <div class="input-box">
+                        <label for="contact_number">Contact Number</label>
+                        {{ form.contact_number|add_class:"input-field" }}
+                        <small id="contactNumberError" style="color:red;"></small>
+                    </div>
+                    <!-- Organization Address -->
+                    <div class="input-box">
+                        <label for="organization_address">Organization Address</label>
+                        {{ form.organization_address|add_class:"input-field" }}
+                        <small id="organizationAddressError" style="color:red;"></small>
+                    </div>
+                    <!-- Registration Number -->
+                    <div class="input-box">
+                        <label for="registration_number">Registration Number</label>
+                        {{ form.registration_number|add_class:"input-field" }}
+                        <small id="registrationNumberError" style="color:red;"></small>
+                    </div>
+                    <!-- Year of Establishment -->
+                    <div class="input-box">
+                        <label for="establishment_year">Year of Establishment</label>
+                        {{ form.establishment_year|add_class:"input-field" }}
+                        <small id="establishmentYearError" style="color:red;"></small>
+                    </div>
+                    <!-- Username -->
+                    <div class="input-box">
+                        <label for="username">Username</label>
+                        {{ form.username|add_class:"input-field" }}
+                        <small id="usernameError" style="color:red;"></small>
+                    </div>
+                    <!-- Password -->
+                    <div class="input-box">
+                        <label for="password">Password</label>
+                        {{ form.password|add_class:"input-field" }}
+                        <small id="passwordError" style="color:red;"></small>
+                    </div>
+                    <!-- Area of Focus -->
+                    <div class="input-box">
+                        <label for="area_of_focus">Area of Focus</label>
+                        {{ form.area_of_focus|add_class:"input-field" }}
+                        <small id="areaOfFocusError" style="color:red;"></small>
+                    </div>
+                    <!-- Additional Comments -->
+                    <div class="input-box">
+                        <label for="additional_comments">Additional Comments</label>
+                        {{ form.additional_comments|add_class:"input-field" }}
+                        <small id="additionalCommentsError" style="color:red;"></small>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="btn-home" onclick="window.location.href='{% url 'index' %}';">Home</button>
+                    <button type="submit" class="btn-register">Register Now</button>
+                    <button type="button" class="btn-USERregister" onclick="window.location.href='{% url 'user_registration' %}';">Register as User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function validateOrganizationForm() {
+            let isValid = true;
+
+            // Clear previous errors
+            const errorFields = ["organizationNameError", "contactPersonError", "contactEmailError", "contactNumberError", "organizationAddressError", "registrationNumberError", "establishmentYearError", "usernameError", "passwordError", "areaOfFocusError", "additionalCommentsError"];
+            errorFields.forEach(id => document.getElementById(id).textContent = "");
+
+            // Get form values
+            const organizationName = document.getElementById("id_organization_name").value.trim();
+            const contactPerson = document.getElementById("id_contact_person").value.trim();
+            const contactEmail = document.getElementById("id_contact_email").value.trim();
+            const contactNumber = document.getElementById("id_contact_number").value.trim();
+            const organizationAddress = document.getElementById("id_organization_address").value.trim();
+            const registrationNumber = document.getElementById("id_registration_number").value.trim();
+            const establishmentYear = document.getElementById("id_establishment_year").value.trim();
+            const username = document.getElementById("id_username").value.trim();
+            const password = document.getElementById("id_password").value.trim();
+            const areaOfFocus = document.getElementById("id_area_of_focus").value.trim();
+
+            // Validation logic
+            if (!organizationName) {
+                document.getElementById("organizationNameError").textContent = "Organization name is required.";
+                isValid = false;
+            }
+            if (!contactPerson) {
+                document.getElementById("contactPersonError").textContent = "Contact person is required.";
+                isValid = false;
+            }
+            if (!contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+                document.getElementById("contactEmailError").textContent = "Valid email is required.";
+                isValid = false;
+            }
+            if (!contactNumber || !/^\d{10}$/.test(contactNumber)) {
+                document.getElementById("contactNumberError").textContent = "Valid 10-digit contact number is required.";
+                isValid = false;
+            }
+            if (!organizationAddress) {
+                document.getElementById("organizationAddressError").textContent = "Address is required.";
+                isValid = false;
+            }
+            if (!registrationNumber) {
+                document.getElementById("registrationNumberError").textContent = "Registration number is required.";
+                isValid = false;
+            }
+            if (!establishmentYear || !/^\d{4}$/.test(establishmentYear)) {
+                document.getElementById("establishmentYearError").textContent = "Valid year is required.";
+                isValid = false;
+            }
+            if (!username) {
+                document.getElementById("usernameError").textContent = "Username is required.";
+                isValid = false;
+            }
+            if (!password || password.length < 6) {
+                document.getElementById("passwordError").textContent = "Password must be at least 6 characters long.";
+                isValid = false;
+            }
+            if (!areaOfFocus) {
+                document.getElementById("areaOfFocusError").textContent = "Area of focus is required.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
+</html>

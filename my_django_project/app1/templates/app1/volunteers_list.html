@@ -1,0 +1,146 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteers List</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+ /* Fixed header for Home button and Registered Volunteers heading */
+.fixed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #ffffff; /* Ensure the header has a solid background */
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-header h2 {
+    margin: 0; /* Remove default margin from the h2 */
+    font-size: 24px;
+}
+
+.home-button {
+    background-color: #5bc1ac;
+    color: #ffffff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: right;
+}
+
+.home-button:hover {
+    background-color: #231E1E;
+}
+
+/* Main container for the volunteer information */
+.volunteer-container {
+    background: #ffffff;
+    padding: 20px;
+    width: 100%;
+    max-width: 1400px;
+    border-radius: 12px;
+    box-shadow: 10px 14px 90px #F5AC6252;
+    margin: 80px auto; /* Ensure content doesn't get hidden behind the fixed header */
+    height: auto; /* Adjust height to fit content */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Flexbox layout to display volunteer cards */
+.volunteer-card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Space between cards */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Volunteer card styles */
+.volunteer-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: calc(33.33% - 20px); /* Fit three cards in a row with proper spacing */
+    box-sizing: border-box;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .volunteer-card {
+        width: calc(50% - 20px); /* Adjust to two cards per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .volunteer-card {
+        width: 100%; /* Adjust to one card per row on very small screens */
+    }
+}
+.btn-pagination {
+    background-color: #5bc1ac;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-pagination:hover {
+    background-color: #231E1E;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+    </style>
+</head>
+<body>
+    <div class="volunteer-container">
+        <div class="fixed-header">  
+        <button type="button"  class="home-button" onclick="window.location.href='{% url 'index' %}';">Home</button>
+        <h2>Registered Volunteers</h2>
+        {% if volunteers.has_previous %}
+        <a class="btn btn-pagination" href="?page={{ volunteers.previous_page_number }}">&laquo; Previous</a>
+    {% endif %}
+    {% if volunteers.has_next %}
+        <a class="btn btn-pagination" href="?page={{ volunteers.next_page_number }}">Next &raquo;</a>
+    {% endif %}
+    
+       
+        </div>
+          
+        <div class="volunteer-card-wrapper">
+            {% for volunteer in volunteers %}
+                <div class="volunteer-card">
+                    <div class="volunteer-info">
+                        <h3>{{ volunteer.name }}</h3>
+                        <p><strong>Email:</strong> {{ volunteer.email }}</p>
+                        <p><strong>Phone:</strong> {{ volunteer.phone }}</p>
+                        <p><strong>Address:</strong> {{ volunteer.address }}</p>
+                        <p><strong>Availability of Vehicle:</strong> {{ volunteer.availability }}</p>
+                        <p><strong>Skills:</strong> {{ volunteer.skills }}</p>
+                        <p><strong>Work:</strong> {{ volunteer.work }}</p>
+                        <p><strong>Message:</strong> {{ volunteer.message }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+</body>
+</html>

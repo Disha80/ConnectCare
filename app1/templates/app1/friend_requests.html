@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incoming Friend Requests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&display=swap" rel="stylesheet">
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+    <style>
+        /* Main content styling */
+        .profile-page .content {
+            max-width: 800px !important;
+            padding: 2rem 3rem !important;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header styling */
+        .content__header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .content__header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .content__header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Friend requests list styling */
+        .requests-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 2rem;
+        }
+
+        .requests-list li {
+            margin-bottom: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .requests-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .requests-list span {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .requests-list form {
+            display: inline;
+            margin-left: 10px;
+        }
+
+        .requests-list button {
+            padding: 8px 20px;
+            font-size: 0.95rem;
+            background: var(--theme-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .requests-list button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .requests-list button.reject {
+            background: #ff4d4d;
+        }
+
+        .requests-list button.reject:hover {
+            background: #e60000;
+        }
+
+        /* No requests message */
+        .no-requests {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 2rem;
+        }
+
+        /* Back to Home link styling */
+        .back-to-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-to-home a {
+            text-decoration: none;
+            color: var(--theme-color);
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-to-home a:hover {
+            color: #1e90ff;
+        }
+        <style>
+    /* Remove all transition/animation related properties */
+    .requests-list li {
+        margin-bottom: 15px;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Remove hover animation */
+    .requests-list li:hover {
+        transform: none;
+    }
+
+    /* Remove transition properties */
+    .requests-list li.removing,
+    .requests-list li {
+        transition: none !important;
+        will-change: unset;
+    }
+
+    /* Remove animations from notifications */
+    .notification {
+        animation: none;
+        opacity: 1;
+        transition: none;
+    }
+
+    /* Keep basic notification styling */
+    .notification-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    .notification.success {
+        background: #e8f5e9;
+        color: #45a049;
+        border: 1px solid #45a049;
+    }
+
+    .notification.error {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #c62828;
+    }
+    .separator {
+    margin: 0 10px;
+}
+    /* Remove keyframe animations */
+</style>
+    </style>
+</head>
+<body>
+    <div class="profile-page">
+        <div class="content">
+            <div class="notification-container" id="notification-container"></div>
+            <!-- Header -->
+            <div class="content__header">
+                <h1>Incoming Friend Requests</h1>
+                <p>Manage your friend requests here</p>
+            </div>
+            <ul class="requests-list">
+                {% for req in requests %}
+                    <li id="request-{{ req.id }}">
+                        <span>{{ req.sender.first_name }} {{ req.sender.last_name }} ({{ req.sender.username }})</span>
+                        <div class="request-actions">
+                            <form class="handle-request-form" data-request-id="{{ req.id }}" data-action="accept">
+                                {% csrf_token %}
+                                <button type="submit">Accept</button>
+                            </form>
+                            <form class="handle-request-form" data-request-id="{{ req.id }}" data-action="reject">
+                                {% csrf_token %}
+                                <button type="submit" class="reject">Reject</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Back to Home link -->
+           <!-- Back to Home/Profile links -->
+           <div class="back-to-home">
+            <a href="{% url 'index' %}">Back to Home</a>
+            <span class="separator">|</span> <!-- Using CSS class for spacing -->
+            <a href="{% url 'profile' %}">Back to Profile</a>
+        </div>
+        </div>
+
+        <!-- Theme switcher elements remain same -->
+        <div class="bg">
+            <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="theme-switcher-wrapper" id="theme-switcher-wrapper">
+            <span>Themes color</span>
+            <ul>
+                <li><em class="is-active" data-theme="orange"></em></li>
+                <li><em data-theme="green"></em></li>
+                <li><em data-theme="purple"></em></li>
+                <li><em data-theme="blue"></em></li>
+            </ul>
+        </div>
+
+        <div class="theme-switcher-button" id="theme-switcher-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                <path fill="currentColor" d="M352 0H32C14.33 0 0 14.33 0 32v224h384V32c0-17.67-14.33-32-32-32zM0 320c0 35.35 28.66 64 64 64h64v64c0 35.35 28.66 64 64 64s64-28.65 64-64v-64h64c35.34 0 64-28.65 64-64v-32H0v32zm192 104c13.25 0 24 10.74 24 24 0 13.25-10.75 24-24 24s-24-10.75-24-24c0-13.26 10.75-24 24-24z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- JavaScript for theme switching -->
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.handle-request-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const requestId = form.dataset.requestId;
+            const action = form.dataset.action;
+            const listItem = document.getElementById(`request-${requestId}`);
+
+            // Immediately remove the list item
+            listItem.remove();
+            
+            // Rest of your AJAX code...
+            try {
+                const response = await fetch(`/handle-friend-request/${requestId}/`, {
+                    // ... existing fetch config
+                });
+                
+                const data = await response.json();
+                showNotification(data.message || 'Request processed');
+            } catch (error) {
+                showNotification('An error occurred', false);
+                // Optionally re-insert the list item here if needed
+            }
+        });
+    });
+});
+
+        (() => {
+            'use-strict'
+            const themeSwiter = {
+                init: function() {
+                    this.wrapper = document.getElementById('theme-switcher-wrapper')
+                    this.button = document.getElementById('theme-switcher-button')
+                    this.theme = this.wrapper.querySelectorAll('[data-theme]')
+                    this.themes = ['orange', 'green', 'purple', 'blue']
+                    this.events()
+                    this.start()
+                },
+                events: function() {
+                    this.button.addEventListener('click', this.displayed.bind(this), false)
+                    this.theme.forEach(theme => theme.addEventListener('click', this.themed.bind(this), false))
+                },
+                start: function() {
+                    let theme = this.themes[Math.floor(Math.random() * this.themes.length)]
+                    this.applyTheme(theme)
+                },
+                displayed: function() {
+                    this.wrapper.classList.toggle('is-open')
+                },
+                themed: function(e) {
+                    const selectedTheme = e.currentTarget.dataset.theme
+                    this.applyTheme(selectedTheme)
+                },
+                applyTheme: function(theme) {
+                    // Remove existing theme classes
+                    this.themes.forEach(t => document.body.classList.remove(`theme-${t}`))
+                    // Add new theme class
+                    document.body.classList.add(`theme-${theme}`)
+                    // Update CSS variable for button colors
+                    const themeColors = {
+                        orange: '#FFA500',
+                        green: '#4CAF50',
+                        purple: '#800080',
+                        blue: '#1d8cf8'
+                    }
+                    document.documentElement.style.setProperty('--theme-color', themeColors[theme])
+                }
+            }
+            themeSwiter.init()
+        })()
+    </script>
+</body>
+</html>

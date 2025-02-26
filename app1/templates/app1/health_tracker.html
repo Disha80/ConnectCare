@@ -1,0 +1,505 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Calculators for Seniors</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <style>
+   
+   .fixed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-header h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #2c3e50;
+}
+
+.home-button, 
+button.home-button {
+    background-color: #5bc1ac;
+    color: #ffffff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    min-width: 120px;
+    transition: background-color 0.3s ease;
+}
+
+.home-button:hover,
+button.home-button:hover {
+    background-color: #231E1E;
+}
+
+.volunteer-container {
+    background: #ffffff;
+    
+    padding: 90px 30px 30px;
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 10px 14px 90px #F5AC6252;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.volunteer-card-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+.volunteer-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 10px 14px 90px #F5AC6252;
+    padding: 20px;
+    width: calc(25% - 15px);
+    height: calc(100vh - 140px);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.volunteer-card h3 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.input-group {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: #34495e;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #bdc3c7;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #5bc1ac;
+    outline: none;
+}
+
+.result {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #2c3e50;
+    max-height: 120px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+@media (max-width: 1200px) {
+    .volunteer-card-wrapper {
+        flex-direction: column;
+        height: auto;
+        padding: 0;
+    }
+    
+    .volunteer-card {
+        width: 100%;
+        height: auto;
+        min-height: 400px;
+    }
+    
+    .volunteer-container {
+        padding: 80px 20px 20px;
+    }
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+    </style>
+</head>
+<body>
+    <div class="volunteer-container">
+        <div class="fixed-header">
+            <h2>Senior Health Calculators</h2>
+            <button class="home-button" onclick="window.location.href='{% url 'index' %}';">Home</button>
+        </div>
+
+        <div class="volunteer-card-wrapper">
+            <!-- Hydration Needs Card -->
+            <div class="volunteer-card">
+                <h3>Daily Hydration Needs</h3>
+                <div class="input-group">
+                    <label for="weight">Body Weight (kg)</label>
+                    <input type="number" id="weight" min="30" max="200" step="0.1" placeholder="Enter weight (30-200 kg)">
+                    <div id="weight-error" class="error-message"></div>
+                    
+                    <label for="activity">Physical Activity Duration</label>
+                    <input type="number" id="activity" min="0" max="12" step="0.5" placeholder="Hours of activity (0-12 hrs)">
+                    <div id="activity-error" class="error-message"></div>
+                    
+                    <label for="temperature">Average Temperature</label>
+                    <input type="number" id="temperature" min="0" max="50" step="0.1" placeholder="Temperature (0-50°C)">
+                    <div id="temperature-error" class="error-message"></div>
+                    
+                    <label for="medications">Daily Medications</label>
+                    <input type="number" id="medications" min="0" max="20" placeholder="Number of medications (0-20)">
+                </div>
+                <button onclick="calculateHydration()" class="home-button">Calculate</button>
+                <div id="hydration-result" class="result"></div>
+            </div>
+
+            <!-- Calorie Requirements Card -->
+            <div class="volunteer-card">
+                <h3>Daily Calorie Requirements</h3>
+                <div class="input-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" min="50" max="120" placeholder="Enter age (50-120 years)">
+                    <div id="age-error" class="error-message"></div>
+
+                    <label for="gender">Gender</label>
+                    <select id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+
+                    <label for="activity-level">Activity Level</label>
+                    <select id="activity-level">
+                        <option value="sedentary">Sedentary (Little/No Exercise)</option>
+                        <option value="light">Light (1-3 days/week)</option>
+                        <option value="moderate">Moderate (3-5 days/week)</option>
+                        <option value="active">Very Active (6-7 days/week)</option>
+                    </select>
+
+                    <label for="weight-calories">Weight (kg)</label>
+                    <input type="number" id="weight-calories" min="30" max="200" step="0.1" placeholder="Enter weight (30-200 kg)">
+                </div>
+                <button onclick="calculateCalories()" class="home-button">Calculate</button>
+                <div id="calorie-result" class="result"></div>
+            </div>
+
+            <!-- Sleep Requirements Card -->
+            <div class="volunteer-card">
+                <h3>Sleep Requirements</h3>
+                <div class="input-group">
+                    <label for="stress">Stress Level</label>
+                    <input type="number" id="stress" min="1" max="10" placeholder="Rate your stress (1-10)">
+                    <div id="stress-error" class="error-message"></div>
+
+                    <label for="screen-time">Screen Time Before Bed</label>
+                    <input type="number" id="screen-time" min="0" max="12" step="0.5" placeholder="Hours of screen time (0-12 hrs)">
+                    
+                    <label for="physical-activity">Daily Physical Activity</label>
+                    <select id="physical-activity">
+                        <option value="low">Low (0-30 minutes)</option>
+                        <option value="moderate">Moderate (30-60 minutes)</option>
+                        <option value="high">High (60+ minutes)</option>
+                    </select>
+
+                    <label for="caffeine">Caffeine Intake After 2 PM</label>
+                    <select id="caffeine">
+                        <option value="none">None</option>
+                        <option value="some">1-2 cups</option>
+                        <option value="high">3+ cups</option>
+                    </select>
+                </div>
+                <button onclick="calculateSleep()" class="home-button">Calculate</button>
+                <div id="sleep-result" class="result"></div>
+            </div>
+
+            <!-- Blood Pressure Card -->
+            <div class="volunteer-card">
+                <h3>Blood Pressure Analysis</h3>
+                <div class="input-group">
+                    <label for="systolic">Systolic Pressure (mmHg)</label>
+                    <input type="number" id="systolic" min="70" max="250" placeholder="Upper number (70-250 mmHg)">
+                    <div id="systolic-error" class="error-message"></div>
+
+                    <label for="diastolic">Diastolic Pressure (mmHg)</label>
+                    <input type="number" id="diastolic" min="40" max="150" placeholder="Lower number (40-150 mmHg)">
+                    <div id="diastolic-error" class="error-message"></div>
+
+                    <label for="heart-rate">Heart Rate (BPM)</label>
+                    <input type="number" id="heart-rate" min="40" max="200" placeholder="Beats per minute (40-200)">
+                    
+                    <label for="measurement-time">Time of Measurement</label>
+                    <select id="measurement-time">
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
+                </div>
+                <button onclick="checkBloodPressure()" class="home-button">Analyze</button>
+                <div id="bp-result" class="result"></div>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+         function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.style.display = 'block';
+            errorElement.textContent = message;
+            return false;
+        }
+
+        function clearError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.style.display = 'none';
+        }
+
+        function validateInput(value, min, max, errorElementId, fieldName) {
+            clearError(errorElementId);
+            if (value === '' || isNaN(value)) {
+                return showError(errorElementId, `Please enter a valid number for ${fieldName}`);
+            }
+            if (value < min || value > max) {
+                return showError(errorElementId, `${fieldName} must be between ${min} and ${max}`);
+            }
+            return true;
+        }
+
+        function calculateHydration() {
+            const weight = parseFloat(document.getElementById("weight").value);
+            const activity = parseFloat(document.getElementById("activity").value);
+            const temperature = parseFloat(document.getElementById("temperature").value);
+            const medications = parseInt(document.getElementById("medications").value) || 0;
+
+            if (!validateInput(weight, 30, 200, "weight-error", "weight") ||
+                !validateInput(activity, 0, 12, "activity-error", "activity hours") ||
+                !validateInput(temperature, 0, 50, "temperature-error", "temperature")) {
+                return;
+            }
+
+            let baseHydration = weight * 0.033;
+            let activityFactor = activity * 0.5;
+            let temperatureFactor = Math.max(0, temperature - 20) * 0.1;
+            let medicationFactor = medications * 0.1;
+
+            const totalHydration = baseHydration + activityFactor + temperatureFactor + medicationFactor;
+            
+            let recommendation = `Based on your inputs, you need approximately ${totalHydration.toFixed(2)} liters of water daily.\n\n`;
+            recommendation += "Remember to:\n";
+            recommendation += "• Drink water regularly throughout the day\n";
+            recommendation += "• Increase intake during physical activity\n";
+            recommendation += "• Consider setting drink reminders";
+
+            document.getElementById("hydration-result").innerText = recommendation;
+        }
+
+        function calculateCalories() {
+            const age = parseInt(document.getElementById("age").value);
+            const weight = parseFloat(document.getElementById("weight-calories").value);
+            const gender = document.getElementById("gender").value;
+            const activityLevel = document.getElementById("activity-level").value;
+
+            if (!validateInput(age, 50, 120, "age-error", "age") ||
+                !validateInput(weight, 30, 200, "weight-error", "weight")) {
+                return;
+            }
+
+            let bmr;
+            if (gender === "male") {
+                bmr = 88.362 + (13.397 * weight) - (5.677 * age) + 5;
+            } else {
+                bmr = 447.593 + (9.247 * weight) - (4.330 * age) + 3;
+            }
+
+            let activityFactor;
+            switch(activityLevel) {
+                case "sedentary": activityFactor = 1.2; break;
+                case "light": activityFactor = 1.375; break;
+                case "moderate": activityFactor = 1.55; break;
+                case "active": activityFactor = 1.725; break;
+            }
+
+            const calories = bmr * activityFactor;
+            const recommendation = `Your estimated daily calorie needs: ${Math.round(calories)} calories\n\n` +
+                                 "This calculation considers your age, gender, weight, and activity level.\n" +
+                                 "Remember to:\n" +
+                                 "• Eat protein-rich foods\n" +
+                                 "• Include plenty of fruits and vegetables\n" +
+                                 "• Stay hydrated\n" +
+                                 "• Consult your doctor about specific dietary needs";
+
+            document.getElementById("calorie-result").innerText = recommendation;
+        }
+
+        function calculateSleep() {
+            const stress = parseInt(document.getElementById("stress").value);
+            const screenTime = parseFloat(document.getElementById("screen-time").value);
+            const physicalActivity = document.getElementById("physical-activity").value;
+            const caffeine = document.getElementById("caffeine").value;
+
+            if (!validateInput(stress, 1, 10, "stress-error", "stress level")) {
+                return;
+            }
+
+            let baseSleep = 8;
+            let stressImpact = stress * 0.2;
+            let screenTimeImpact = screenTime * 0.15;
+            
+            let activityImpact = 0;
+            switch(physicalActivity) {
+                case "low": activityImpact = 0; break;
+                case "moderate": activityImpact = -0.5; break;
+                case "high": activityImpact = -0.75; break;
+            }
+
+            let caffeineImpact = 0;
+            switch(caffeine) {
+                case "none": caffeineImpact = 0; break;
+                case "some": caffeineImpact = 0.5; break;
+                case "high": caffeineImpact = 1; break;
+            }
+
+            let recommendedSleep = baseSleep + stressImpact + screenTimeImpact + activityImpact + caffeineImpact;
+            recommendedSleep = Math.max(6, Math.min(10, recommendedSleep));
+
+            let sleepQualityTips = "Sleep Quality Tips:\n";
+            if (screenTime > 1) {
+                sleepQualityTips += "• Reduce screen time before bed\n";
+            }
+            if (stress > 5) {
+                sleepQualityTips += "• Consider relaxation techniques before bed\n";
+            }
+            if (caffeine !== "none") {
+                sleepQualityTips += "• Limit caffeine intake after 2 PM\n";
+            }
+            if (physicalActivity === "low") {
+                sleepQualityTips += "• Consider light exercise during the day\n";
+            }
+
+            const recommendation = `Recommended sleep duration: ${recommendedSleep.toFixed(1)} hours\n\n${sleepQualityTips}\n` +
+                                 "General recommendations:\n" +
+                                 "• Maintain a consistent sleep schedule\n" +
+                                 "• Keep your bedroom cool and dark\n" +
+                                 "• Avoid large meals before bedtime";
+
+            document.getElementById("sleep-result").innerText = recommendation;
+        }
+
+        function checkBloodPressure() {
+            const systolic = parseInt(document.getElementById("systolic").value);
+            const diastolic = parseInt(document.getElementById("diastolic").value);
+            const heartRate = parseInt(document.getElementById("heart-rate").value) || 0;
+            const measurementTime = document.getElementById("measurement-time").value;
+
+            if (!validateInput(systolic, 70, 250, "systolic-error", "systolic pressure") ||
+                !validateInput(diastolic, 40, 150, "diastolic-error", "diastolic pressure")) {
+                return;
+            }
+
+            let category = "";
+            let urgency = "";
+            let recommendations = [];
+
+            if (systolic <120 && diastolic <80) {
+                category = "Normal";
+                recommendations = [
+                    "• Maintain healthy lifestyle habits",
+                    "• Continue regular BP monitoring",
+                    "• Stay physically active"
+                ];
+            } else if (systolic <= 129 && diastolic < 80) {
+                category = "Elevated";
+                recommendations = [
+                    "• Increase physical activity",
+                    "• Reduce sodium intake",
+                    "• Monitor BP more frequently"
+                ];
+            } else if ((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <= 89)) {
+                category = "Stage 1 Hypertension";
+                urgency = "Consult your healthcare provider within the next week.";
+                recommendations = [
+                    "• Schedule a doctor's appointment",
+                    "• Start monitoring BP daily",
+                    "• Reduce sodium intake",
+                    "• Consider DASH diet"
+                ];
+            } else if (systolic >= 140 || diastolic >= 90) {
+                category = "Stage 2 Hypertension";
+                urgency = "Contact your healthcare provider within 24 hours.";
+                recommendations = [
+                    "• Seek medical attention promptly",
+                    "• Monitor BP multiple times daily",
+                    "• Take prescribed medications as directed",
+                    "• Implement immediate lifestyle changes"
+                ];
+            }
+
+            let timeContext = "";
+            switch(measurementTime) {
+                case "morning":
+                    timeContext = "Morning readings are typically more accurate for diagnosis.";
+                    break;
+                case "afternoon":
+                    timeContext = "Afternoon readings may be affected by daily activities.";
+                    break;
+                case "evening":
+                    timeContext = "Evening readings might be elevated due to day's activities.";
+                    break;
+            }
+
+            let heartRateAdvice = "";
+            if (heartRate) {
+                if (heartRate < 60) {
+                    heartRateAdvice = "Your heart rate is below normal range. Mention this to your doctor.";
+                } else if (heartRate > 100) {
+                    heartRateAdvice = "Your heart rate is elevated. Discuss this with your healthcare provider.";
+                } else {
+                    heartRateAdvice = "Your heart rate is within normal range.";
+                }
+            }
+
+            const result = `Blood Pressure Category: ${category}\n` +
+                          `Reading: ${systolic}/${diastolic} mmHg\n` +
+                          (heartRate ? `Heart Rate: ${heartRate} BPM\n` : "") +
+                          (urgency ? `\nUrgency: ${urgency}\n` : "\n") +
+                          `${timeContext}\n\n` +
+                          (heartRateAdvice ? `${heartRateAdvice}\n\n` : "") +
+                          "Recommendations:\n" +
+                          recommendations.join("\n");
+
+            document.getElementById("bp-result").innerText = result;
+        }
+    </script>
+</body>
+</html>
